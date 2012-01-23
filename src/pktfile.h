@@ -2,16 +2,19 @@
 #define PKT_h
 
 #include <string>
+#include <fstream>
 
 struct PKT_Header
 {
     char signature[3]; // 'PKT'
-    char version[3]; //ex : 0x00, 0x03
+    char version[2]; //ex : 0x01, 0x03
     char snifferID;
-    unsigned long buid; //ex : 13623
+    unsigned int build; //ex : 13623
     char locale[4]; //ex : "frFR"
     char sessionKey[40];
-    unsigned long optionalHearderLength;
+    unsigned int date;
+    unsigned int startTickCount;
+    unsigned int optionalHearderLength;
 };
 
 class PKTFile
@@ -24,11 +27,21 @@ class PKTFile
     void SetFilename(std::string filename){m_filename = filename;}
     std::string GetFilename(){return m_filename;}
 
-
+    bool ReadHeader();
+    int GetPKTVersion();
+    int GetSnifferID();
+    unsigned int GetBuild();
+    char *GetLocale();
 
     private:
 
+    void ReadBuild();
+    void ReadInvertU32(unsigned int &var);
+
     std::string m_filename;
+    std::ifstream m_file;
+
+    PKT_Header m_header;
 };
 
 #endif

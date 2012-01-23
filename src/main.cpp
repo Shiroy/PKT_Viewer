@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     if(!file.Open())
         return 1;
 
+    file.ReadHeader();
 
     return 0;
 }
